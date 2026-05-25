@@ -1,0 +1,48 @@
+type: api_to_lake
+id: shopify_orders
+owner: team-commerce
+
+source:
+  url: https://api.shopify.com/admin/orders.json
+  method: GET
+  auth:
+    connection: shopify_prod
+  params:
+    updated_at_min: "{{ macros.ds_add(ds, -1) }}T00:00:00Z"
+    updated_at_max: "{{ ds }}T00:00:00Z"
+    status: any
+  pagination:
+    type: cursor
+    cursor_param: page_info
+    cursor_response_path: $.links.next
+  records_path: $.orders[*]
+  rate_limit_rps: 2
+
+destination:
+  type: gcs
+  bucket: raw-lake-prod
+  path: "shopify/orders/dt={{ ds }}/"
+
+parquet:
+  compression: snappy
+  fields:
+    - { name: id,         type: long,      nullable: false }
+    - { name: email,      type: string }
+    - { name: total,      type: double }
+    - { name: currency,   type: string }
+    - { name: created_at, type: timestamp, nullable: false }
+    - { name: updated_at, type: timestamp, nullable: false }
+
+schedule:
+  cron: "0 2 * * *"
+  timezone: Asia/Taipei
+  start_date: "2026-01-01"
+  catchup: false
+
+runtime:
+  cpu: "500m"
+  memory: "1Gi"
+  retries: 3
+  retry_backoff_seconds: 60
+  timeout_minutes: 30
+  on_failure_slack: "#data-alerts"

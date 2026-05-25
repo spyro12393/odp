@@ -1,0 +1,27 @@
+type: ftp_to_lake
+id: vendor_invoices
+owner: team-finance
+
+source:
+  auth:
+    connection: vendor_sftp
+  protocol: sftp
+  remote_path: "/outbound/invoices/{{ ds }}/*.pdf"
+  delete_after_download: false
+
+destination:
+  type: minio
+  bucket: raw-vendor
+  path: "vendor_invoices/dt={{ ds }}/"
+
+schedule:
+  cron: "0 5 * * *"
+  timezone: Asia/Taipei
+  start_date: "2026-01-01"
+  catchup: false
+
+runtime:
+  cpu: "250m"
+  memory: "512Mi"
+  retries: 2
+  timeout_minutes: 60

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uv --version)",
+      "Bash(python3 -c \"import pydantic, yaml; print\\('pydantic', pydantic.VERSION\\); print\\('pyyaml', yaml.__version__\\)\")",
+      "Bash(python3 -m venv .venv)",
+      "Bash(.venv/bin/pip install *)",
+      "Bash(.venv/bin/pytest -v)"
+    ]
+  }
+}

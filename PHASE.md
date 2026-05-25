@@ -5,7 +5,7 @@ Update the checkboxes as work lands; keep the "Current focus" pointer accurate.
 
 **Status legend:** `[ ]` not started · `[~]` in progress · `[x]` done · `[!]` blocked
 
-**Current focus:** Phase 1 / M1 — Config Schema (M0 scaffolding done, CI workflow file deferred to when CI host is chosen)
+**Current focus:** Phase 1 / M2 — Platform Library Core (M1 schema landed; CI hook deferred with the rest of M0/M1 CI work until CI host is chosen)
 
 ---
 
@@ -25,11 +25,12 @@ One real, scheduled pipeline working end-to-end for each of `api_to_lake`,
 - [ ] CI skeleton (lint + test on PR) — deferred, blocked on CI host choice (GitHub Actions / GitLab CI / Jenkins / ?)
 
 ### M1 — Config Schema
-- [ ] Pydantic models for shared blocks (`schedule`, `runtime`, `destination`, `auth`)
-- [ ] Pydantic models per source type (`api_to_lake`, `ftp_to_lake`, `crawler`)
-- [ ] YAML loader + validator CLI (`os-data-platform validate <path>`)
-- [ ] CI hook that validates every file under `configs/`
-- [ ] Example reference configs for all three source types
+- [x] Pydantic models for shared blocks (`schedule`, `runtime`, `destination`, `auth`) — [lib/os_data_platform/config/common.py](lib/os_data_platform/config/common.py)
+- [x] Pydantic models per source type — [api.py](lib/os_data_platform/config/api.py), [ftp.py](lib/os_data_platform/config/ftp.py), [crawler.py](lib/os_data_platform/config/crawler.py)
+- [x] YAML loader + validator CLI (`os-data-platform validate <path>`) — [lib/os_data_platform/cli.py](lib/os_data_platform/cli.py), [registry.py](lib/os_data_platform/config/registry.py)
+- [ ] CI hook that validates every file under `configs/` — deferred with the rest of CI until host is chosen
+- [x] Example reference configs for all three source types — [configs/](configs/)
+- [x] Test suite (14 tests, all passing) — [tests/](tests/)
 
 ### M2 — Platform Library Core
 - [ ] `Sink` interface

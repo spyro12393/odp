@@ -1,0 +1,26 @@
+type: crawler
+id: competitor_pages
+owner: team-research
+
+source:
+  urls:
+    - https://example.com/products
+    - https://example.com/pricing
+  user_agent: "os-data-platform/0.1 (+contact: data@example.com)"
+  follow_links: false
+  max_depth: 1
+  rate_limit_rps: 0.5
+
+destination:
+  type: gcs
+  bucket: raw-research
+  path: "competitor_pages/dt={{ ds }}/"
+
+schedule:
+  cron: "0 6 * * 1"  # Mondays 06:00
+  timezone: Asia/Taipei
+  start_date: "2026-01-01"
+  catchup: false
+
+runtime:
+  timeout_minutes: 15
